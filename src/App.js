@@ -15,7 +15,6 @@ class App extends Component {
     this.state=(
       { resultToggle: false,
         operatorToggle: false,
-        minusToggle: false,
         numberToggle: false,
         operator: '',
         input: '0',
@@ -24,39 +23,21 @@ class App extends Component {
         result: 0 }
     )
     this.clickHandleClear = this.clickHandleClear.bind(this)
-    this.clickHandleBackspace = this.clickHandleBackspace.bind(this)
     this.clickHandleOperator = this.clickHandleOperator.bind(this)
     this.clickHandleEquals = this.clickHandleEquals.bind(this)
     this.clickHandleNumbers = this.clickHandleNumbers.bind(this)
     this.clickHandleDecimal = this.clickHandleDecimal.bind(this)
+    this.clickHandlePlusMinus = this.clickHandlePlusMinus.bind(this)
   }
+
+  //*******************************************//
   //______________AC btn handler_______________//
-  clickHandleBackspace() {
-    //backspace
-    console.log(parseFloat("1000000"))
-    console.log(parseFloat("1000000", 10))
-    console.log(parseFloat("3.25"))
-    console.log(parseFloat("3.25", 10))
-    console.log(parseFloat("1000000"))
-    console.log(parseFloat("1000000", 10))
-    console.log(parseFloat("3.25"))
-    console.log(parseFloat("3.25", 10))
-
-
-//     1.35+1.35+1.35 => 4.050000000000001             .toFixed(9).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')
-// (1.35+1.35+1.35).toFixed(2)     => 4.05
-// (1.35+1.35+1.35).toFixed(3) => 4.05
-
-//  or...
-// (1.35+1.35+1.35).toFixed(4)     => 4.0500
-// (1.35+1.35+1.35).toFixed(4) => 4.05
-  }
+  //*******************************************//
 
   clickHandleClear = () => {
     this.setState(
       { resultToggle: false,
         operatorToggle: false,
-        minusToggle: false,
         numberToggle: false,
         operator: '',
         input: '0',
@@ -72,12 +53,11 @@ class App extends Component {
 
   clickHandleOperator(e) {
     if (this.state.inputPrev === '' || this.state.input === '') {
-      console.log(11111111111111111);
       //no calculations, just updating state
       if (!this.state.operatorToggle) {
         //no operator yet chosen, just update operator state
         this.setState(
-          { operator: [e.target.innerText],
+          { operator: e.target.innerText,
             operatorToggle: true,
             result: this.state.input,
             inputPrev: this.state.input,
@@ -87,35 +67,25 @@ class App extends Component {
       } else {
         //already operator chosen 
         this.setState(
-          { operator: [...this.state.operator ,e.target.innerText] }
+          { operator: e.target.innerText }
         )
       }
       return
     } 
     if (this.state.input === '0') {
-      console.log(24323523454534);
       //operator chosen after equals
       this.setState(
         { resultToggle: false,
           operatorToggle: true,
           numberToggle: false,
-          operator: [e.target.innerText]}
+          operator: e.target.innerText}
       )
       return
     } else {
-      console.log(33333333333333333);
       let result
-      let operatorToUse = this.state.operator[0]
       let inputToUse = this.state.input
-      if (this.state.operator.length > 1) {
-        if (this.state.operator[this.state.operator.length -1] === '-') {
-          operatorToUse = this.state.operator[this.state.operator.length -2]
-          inputToUse = `-${this.state.input}`
-        } else {
-          operatorToUse = this.state.operator[this.state.operator.length -1]
-          inputToUse = this.state.input
-        }
-      }
+      let operatorToUse = this.state.operator
+
       if (operatorToUse === '/') {
         result = parseFloat(this.state.inputPrev) / parseFloat(inputToUse)
       }
@@ -134,7 +104,7 @@ class App extends Component {
         { result: result,
           resultToggle: false,
           input: '',
-          operator: [e.target.innerText],
+          operator: e.target.innerText,
           inputPrev: result }
       )
     }
@@ -170,10 +140,28 @@ class App extends Component {
     }
   }
 
+  //*************************************************//
+  //____________Plus Minus btn handler_______________//
+  //*************************************************//
+
+  clickHandlePlusMinus() {
+    console.log(this.state.input);
+    if (this.state.input.split('')[0] === '-') {
+      this.setState( 
+        { input: this.state.input.slice (1) }
+      )
+    } else {
+      this.setState(
+        { input: '-' + this.state.input }
+      )
+    }
+    console.log(this.state.input);
+  }
     
   
-
+  //**********************************************//
   //____________Decimal btn handler_______________//
+  //**********************************************//
 
   clickHandleDecimal() {
     //first no input yet so leave 0 and add decimal 
@@ -183,7 +171,10 @@ class App extends Component {
       )
     }
   }
+
+  //*********************************************//
   //____________Equals btn handler_______________//
+  //*********************************************//
   clickHandleEquals() {
     if (this.state.inputPrev === '') {
       this.setState(
@@ -195,16 +186,16 @@ class App extends Component {
     }
     if (this.state.inputPrev !== '' && this.state.input === '') {
       let result
-      if (this.state.operator[this.state.operator.length -1] === '/') {
+      if (this.state.operator === '/') {
         result = 1
       }
-      if (this.state.operator[this.state.operator.length -1] === '*') {
+      if (this.state.operator === '*') {
         result = parseFloat(this.state.inputPrev[0])**2
       }
-      if (this.state.operator[this.state.operator.length -1] === '-') {
+      if (this.state.operator === '-') {
         result = 0
       }
-      if (this.state.operator[this.state.operator.length -1] === '+') {
+      if (this.state.operator === '+') {
         result = parseFloat(this.state.inputPrev)*2
       }
       result = Math.round(parseFloat((result * Math.pow(10, 4)).toFixed(4))) / Math.pow(10, 4)
@@ -218,17 +209,9 @@ class App extends Component {
       return
     } else {
         let result
-        let operatorToUse = this.state.operator[0]
+        let operatorToUse = this.state.operator
         let inputToUse = this.state.input
-        if (this.state.operator.length > 1) {
-          if (this.state.operator[this.state.operator.length -1] === '-') {
-            operatorToUse = this.state.operator[this.state.operator.length -2]
-            inputToUse = `-${this.state.input}`
-          } else {
-            operatorToUse = this.state.operator[this.state.operator.length -1]
-            inputToUse = this.state.input
-          }
-        }
+        
         if (operatorToUse === '/') {
           result = parseFloat(this.state.inputPrev) / parseFloat(inputToUse)
         }
@@ -273,7 +256,6 @@ class App extends Component {
               {text: "subtract", symbol: "-"}, 
               {text: "add", symbol: "+"},
               {text: "clear", symbol: "AC"},
-              {text: "backspace", symbol: "C"}
             ].map(operator => {
               return (
                 <Operator key={operator.text} 
@@ -281,12 +263,11 @@ class App extends Component {
                           operator={operator.symbol} 
                           id={operator.text}
                           clear={this.clickHandleClear}
-                          backspace={this.clickHandleBackspace}
                 />
               )
             })}
             <Equals onClick={this.clickHandleEquals}/>
-            <Numbers onClickNumbers={this.clickHandleNumbers} onClickDecimal={this.clickHandleDecimal}/>
+            <Numbers onClickNumbers={this.clickHandleNumbers} onClickDecimal={this.clickHandleDecimal} onClickPlusMinus={this.clickHandlePlusMinus}/>
           </div>
         </div>
         <footer>Bponthemove, Oct 2021</footer>
@@ -298,3 +279,29 @@ class App extends Component {
 
 
 export default App;
+
+
+// {
+//   "resultToggle": true,
+//   "operatorToggle": false,
+//   "minusToggle": false,
+//   "numberToggle": true,
+//   "operator": "+",
+//   "input": "0",
+//   "inputPrev": 10,
+//   "output": "5 + 5 =",
+//   "result": 10,
+//   "secondNumberToggle": false
+// }
+
+// {
+//   "resultToggle": false,
+//   "operatorToggle": false,
+//   "minusToggle": false,
+//   "numberToggle": true,
+//   "operator": "+",
+//   "input": "4",
+//   "inputPrev": "4",
+//   "output": "",
+//   "result": "4"
+// }

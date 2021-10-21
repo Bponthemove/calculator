@@ -53,7 +53,7 @@ h1{
   display: grid;
   gap: 3px;
   grid-template-areas: 
-    "ac c divide multiply"
+    "ac ac divide multiply"
     "numbers numbers numbers subtract"
     "numbers numbers numbers add"
     "numbers numbers numbers equals"
@@ -79,7 +79,7 @@ h1{
     "nine eight seven"
     "six five four"
     "three two one"
-    "zero zero decimal";
+    "zero decimal plusminus";
 }
 
 .number-container > div{
@@ -173,6 +173,10 @@ grid-area: ac;
 
 #decimal{
   grid-area: decimal;
+}
+
+#plusMinus{
+  grid-area: plusminus;
 }
 
 

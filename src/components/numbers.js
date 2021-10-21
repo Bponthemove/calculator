@@ -1,6 +1,5 @@
-import React from "react";
 
-const Numbers = ({ onClickNumbers, onClickDecimal }) => {
+const Numbers = ({ onClickNumbers, onClickDecimal, onClickPlusMinus }) => {
         return(
             <div className="number-container">
                 <div className="btn" id="nine" onClick={onClickNumbers}>9</div>
@@ -13,7 +12,8 @@ const Numbers = ({ onClickNumbers, onClickDecimal }) => {
                 <div className="btn" id="two" onClick={onClickNumbers}>2</div>  
                 <div className="btn" id="one" onClick={onClickNumbers}>1</div>
                 <div className="btn" id="zero" onClick={onClickNumbers}>0</div>
-                <div className="btn" id="decimal" onClick={onClickDecimal}>.</div>    
+                <div className="btn" id="decimal" onClick={onClickDecimal}>.</div>
+                <div className="btn" id="plusMinus" onClick={onClickPlusMinus}>±</div>    
             </div>       
         )
 }
