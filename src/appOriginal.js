@@ -56,14 +56,14 @@ class App extends Component {
       //no calculations, just updating state
       if (!this.state.operatorToggle) {
         //no operator yet chosen, just update operator state
-        this.setState( prevState => (
+        this.setState(
           { operator: e.target.innerText,
             operatorToggle: true,
-            result: prevState.input,
-            inputPrev: prevState.input,
+            result: this.state.input,
+            inputPrev: this.state.input,
             resultToggle: false,
             input: '' }
-        ) )
+        )
       } else {
         //already operator chosen 
         this.setState(
@@ -120,11 +120,11 @@ class App extends Component {
       //numbertoggle is false means it is the first time a number is pressed 
       if (this.state.input !== '0') {
         //state is not '0' means we are updating to state
-        this.setState( prevState => (
-          { input: prevState.input + e.target.innerText,
+        this.setState( 
+          { input: this.state.input + e.target.innerText,
             numberToggle: true,
             operatorToggle: false }
-        ) )
+        ) 
       } else {
         //if state is '0' means we are making new state
         this.setState(
@@ -134,9 +134,9 @@ class App extends Component {
       return
     } else {
       //numbertoggle is true so we are updating state
-      this.setState( prevState => (
-        { input: prevState.input + e.target.innerText }
-      ) )
+      this.setState(
+        { input: this.state.input + e.target.innerText }
+      )
     }
   }
 
@@ -145,15 +145,17 @@ class App extends Component {
   //*************************************************//
 
   clickHandlePlusMinus() {
+    console.log(this.state.input);
     if (this.state.input.split('')[0] === '-') {
-      this.setState( prevState => (
-        { input: prevState.input.slice(1) }
-      ) )
+      this.setState( 
+        { input: this.state.input.slice (1) }
+      )
     } else {
-      this.setState( prevState => (
-        { input: '-' + prevState.input }
-      ) )
+      this.setState(
+        { input: '-' + this.state.input }
+      )
     }
+    console.log(this.state.input);
   }
     
   
@@ -164,9 +166,9 @@ class App extends Component {
   clickHandleDecimal() {
     //first no input yet so leave 0 and add decimal 
     if (this.state.input.slice(-1) !== "." && this.state.input.search(/\./) === -1) {
-      this.setState( prevState => (
-        {input: prevState.input + "."}
-      ) )
+      this.setState(
+        {input: this.state.input + "."}
+      )
     }
   }
 
@@ -175,11 +177,11 @@ class App extends Component {
   //*********************************************//
   clickHandleEquals() {
     if (this.state.inputPrev === '') {
-      this.setState( prevState => (
-        { result: prevState.input,
+      this.setState(
+        { result: this.state.input,
           resultToggle: true,
-          output: prevState.input }
-      ) )
+          output: this.state.input }
+      )
       return
     }
     if (this.state.inputPrev !== '' && this.state.input === '') {
