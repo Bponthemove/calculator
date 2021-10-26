@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { Output } from './components/output';
 import { Operator } from './components/operator';
 import { Equals } from './components/equals';
@@ -9,94 +9,91 @@ import './App.css';
 //make inputnumber the current input and as soon as an oprator is pressed that inputnumber is stored in calcArr, 
 //followed by its chosen operator which is pushed to calcArr if a number or equals is pressed 
 
-class App extends Component {
-  state = 
-    { resultToggle: false,
-      operatorToggle: false,
-      numberToggle: false,
-      operator: '',
-      input: '0',
-      inputPrev: '', 
-      output: '',
-      result: 0 }
+function App(props) {
+
+  const [resultToggle, setResultToggle] = useState(false)
+  const [operatorToggle, setOperatorToggle] = useState(false)
+  const [numberToggle, setNumberToggle] = useState(false)
+  const [operator, setOperator] = useState('')
+  const [input, setInput] = useState('0')
+  const [inputPrev, setInputPrev] = useState('')
+  const [output, setOutput] = useState('')
+  const [result, setResult] = useState(0)
+  // state = 
+  //   { resultToggle: false,
+  //     operatorToggle: false,
+  //     numberToggle: false,
+  //     operator: '',
+  //     input: '0',
+  //     inputPrev: '', 
+  //     output: '',
+  //     result: 0 }
 
   //*******************************************//
   //______________AC btn handler_______________//
   //*******************************************//
 
-  clickHandleClear = () => {
-    this.setState(
-      { resultToggle: false,
-        operatorToggle: false,
-        numberToggle: false,
-        operator: '',
-        input: '0',
-        inputPrev: '', 
-        output: '',
-        result: 0 }
-    )
+  function clickHandleClear() {
+    setResultToggle(false),
+    setOperatorToggle(false),
+    setNumberToggle(false),
+    setOperator(''),
+    setInput('0'),
+    setInputPrev(''), 
+    setOutput(''),
+    setResult(0) 
   }
 
   //***********************************************//
   //____________Operator btn handler_______________//
   //***********************************************//
 
-  clickHandleOperator = (e) => {
-    if (this.state.inputPrev === '' || this.state.input === '') {
+  function clickHandleOperator(e) {
+    if (inputPrev === '' || input === '') {
       //no calculations, just updating state
-      if (!this.state.operatorToggle) {
+      if (!operatorToggle) {
         //no operator yet chosen, just update operator state
-        this.setState( prevState => (
-          { operator: e.target.innerText,
-            operatorToggle: true,
-            result: prevState.input,
-            inputPrev: prevState.input,
-            resultToggle: false,
-            input: '' }
-        ) )
+        setOperator(e.target.innerText),
+        setOperatorToggle(true),
+        setResult(input),
+        setInputPrev(input),
+        setResultToggle(false),
+        setInput('') 
       } else {
         //already operator chosen 
-        this.setState(
-          { operator: e.target.innerText }
-        )
+          setOperator(e.target.innerText)
       }
       return
     } 
-    if (this.state.input === '0') {
+    else if (input === '0') {
       //operator chosen after equals
-      this.setState(
-        { resultToggle: false,
-          operatorToggle: true,
-          numberToggle: false,
-          operator: e.target.innerText}
-      )
+      setResultToggle(false),
+      setOperatorToggle(true),
+      setNumberToggle(false),
+      setOperator(e.target.innerText)
       return
     } else {
       let result
-      let inputToUse = this.state.input
-      let operatorToUse = this.state.operator
 
-      if (operatorToUse === '/') {
-        result = parseFloat(this.state.inputPrev) / parseFloat(inputToUse)
+      if (operator === '/') {
+        result = parseFloat(inputPrev) / parseFloat(input)
       }
-      if (operatorToUse === '*') {
-        result = parseFloat(this.state.inputPrev) * parseFloat(inputToUse)
+      if (operator === '*') {
+        result = parseFloat(inputPrev) * parseFloat(input)
       }
-      if (operatorToUse === '+') {
-        result = parseFloat(this.state.inputPrev) + parseFloat(inputToUse)
+      if (operator === '+') {
+        result = parseFloat(inputPrev) + parseFloat(input)
       }
-      if (operatorToUse === '-') {
-        result = parseFloat(this.state.inputPrev) - parseFloat(inputToUse)
+      if (operator === '-') {
+        result = parseFloat(inputPrev) - parseFloat(input)
       }
       result = Math.round(parseFloat((result * Math.pow(10, 4)).toFixed(4))) / Math.pow(10, 4)
       //result toggle true so calculate result and use that as prev state
-      this.setState(
-        { result: result,
-          resultToggle: false,
-          input: '',
-          operator: e.target.innerText,
-          inputPrev: result }
-      )
+      setResult(result),
+      setResultToggle(false),
+      setInput(''),
+      setOperator(e.target.innerText),
+      setInputPrev(result)
     }
   }
     
@@ -105,16 +102,16 @@ class App extends Component {
   //____________Number btn handler_______________//
   //*********************************************//
 
-  clickHandleNumbers = (e) => {
-    if (!this.state.numberToggle) {
+  function clickHandleNumbers(e) {
+    if (!numberToggle) {
+      console.log(1111111111);
       //numbertoggle is false means it is the first time a number is pressed 
-      if (this.state.input !== '0') {
+      if (input !== '0') {
+        console.log(input)
         //state is not '0' means we are updating to state
-        this.setState( prevState => (
-          { input: prevState.input + e.target.innerText,
-            numberToggle: true,
-            operatorToggle: false }
-        ) )
+        setInput(prevState => console.log(prevState)),
+        setNumberToggle(true),
+        setOperatorToggle(false)
       } else {
         //if state is '0' means we are making new state
         this.setState(
@@ -123,6 +120,7 @@ class App extends Component {
       }
       return
     } else {
+      console.log(222222222222)
       //numbertoggle is true so we are updating state
       this.setState( prevState => (
         { input: prevState.input + e.target.innerText }
